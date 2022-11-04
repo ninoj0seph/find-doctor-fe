@@ -17,9 +17,9 @@
           <v-card class="grey lighten-5" elevation="5" v-else>
             <v-card-title>{{tag.specialityName}}</v-card-title>
             <v-card-subtitle>{{tag.tags.join(', ')}}</v-card-subtitle>
-            {{tag.txtModel}}
+
             <v-container style="padding: 20px">
-              <v-text-field v-on:submit="pushTags(tag._id, tag.txtModel)" v-model="tag.txtModel" placeholder="Add new tag..."></v-text-field>
+              <v-text-field v-on:keyup.enter="pushTags(tag._id, tag.txtModel)" v-model="tag.txtModel" placeholder="Add new tag..."></v-text-field>
             </v-container>
             <v-card-actions class="pt-0">
               <v-btn v-on:click="pushTags(tag._id, tag.txtModel)" text color="teal accent-4" >Submit </v-btn>
@@ -65,13 +65,14 @@ export default {
       });
       await this.fetchTags()
     },
-    async pushTags(id, tag) {
+    async pushTags(_id, tags) {
       console.log('c')
       await axios.post('http://localhost:9090/addtag', {
-        "_id" : id,
-        "tags" : tag.split(','),
+        _id,
+        tags,
       }).then(response => {
         console.log(response);
+        this.fetchTags();
       });
     },
     chunk(arr, chunkSize) {
