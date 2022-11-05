@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import AllTags from "@/views/AllTags.vue";
+import SearchDoctor from "@/views/SearchDoctor.vue";
 
 Vue.use(VueRouter)
 
@@ -10,6 +11,12 @@ const routes = [
     path: '/',
     name: 'HomeView',
     component: HomeView
+  },
+  {
+    path: '/doctor/:id',
+    name: 'SearchDoctor',
+    // redirect: '/doctor/:id',
+    component: SearchDoctor,
   },
   {
     path: '/about',

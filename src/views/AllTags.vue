@@ -57,23 +57,30 @@ export default {
     },
     async pushCreateSpeciality(spec) {
       console.log('c')
-      await axios.post('http://localhost:9090/specialitylookup', {
-        specialityName : spec,
-        tags : [spec],
-      }).then(response => {
-        console.log(response);
-      });
-      await this.fetchTags()
+      if(spec != null){
+        await axios.post('http://localhost:9090/specialitylookup', {
+          specialityName : spec,
+          tags : [spec],
+        }).then(response => {
+          console.log(response);
+        });
+        await this.fetchTags()
+        // window.location.reload();
+      }
+
     },
     async pushTags(_id, tags) {
       console.log('c')
-      await axios.post('http://localhost:9090/addtag', {
-        _id,
-        tags,
-      }).then(response => {
-        console.log(response);
-        this.fetchTags();
-      });
+      if(tags != null){
+        await axios.post('http://localhost:9090/addtag', {
+          _id,
+          tags,
+        }).then(response => {
+          console.log(response);
+          this.fetchTags();
+          // window.location.reload();
+        });
+      }
     },
     chunk(arr, chunkSize) {
       if (chunkSize <= 0) throw "Invalid chunk size";

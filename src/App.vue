@@ -7,24 +7,26 @@
       dark
     >
       <RouterLink to="/"  style="text-decoration: none; color: inherit;">
-      <div class="d-flex align-center">
-        <v-toolbar-title class="text-h6 mr-6 hidden-sm-and-down">
-          Find My Doctor - Demo
-        </v-toolbar-title>
-      </div>
-    </RouterLink>
+        <div class="d-flex align-center">
+          <v-toolbar-title class="text-h6 mr-6 hidden-sm-and-down">
+            Find My Doctor - Demo
+          </v-toolbar-title>
+        </div>
+      </RouterLink>
       <v-autocomplete
-          append-icon="mdi-magnify"
-          append-outer-icon
-          clearable
+          v-on:keyup.enter="newWindow(search)"
+          v-model="select"
+          :loading="loading"
+          :items="tags"
+          :search-input.sync="search"
+          cache-items
+          class="mx-4"
+          flat
+          hide-no-data
           hide-details
-          hide-selected
-          item-text="name"
-          item-value="id"
           label="Search for a doctor..."
           solo-inverted
-      >
-      </v-autocomplete>
+      ></v-autocomplete>
 
       <v-spacer></v-spacer>
 
@@ -64,11 +66,35 @@
 
 <script>
 
+import axios from "axios";
+// import router from "@/router";
+
 export default {
   name: 'App',
+  async mounted() {
+    await this.fetchTags()
+  },
 
-  data: () => ({
-    //
-  }),
+  methods : {
+    newWindow(keyword){
+      this.$router.push(`/doctor/${keyword}`).catch(()=>{});
+    },
+
+    async fetchTags() {
+      await axios.get('http://localhost:9090/tagslookup-all').then(response => {
+        this.tags = response.data;
+      });
+    },
+  },
+
+  data () {
+    return {
+      loading: false,
+      items: [],
+      tags: [],
+      search: null,
+      select: null,
+    }
+  },
 };
 </script>
